@@ -1,0 +1,11 @@
+import { Router } from 'express';
+import { getGroups, createGroup, joinGroup, leaveGroup, getGroupPosts, createGroupPost } from '../controllers/groupsController';
+import { requireAuth } from '../middleware/authMiddleware';
+const router = Router();
+router.get('/',                    requireAuth, getGroups as any);
+router.post('/',                   requireAuth, createGroup as any);
+router.post('/:id/join',           requireAuth, joinGroup as any);
+router.delete('/:id/leave',        requireAuth, leaveGroup as any);
+router.get('/:id/posts',           requireAuth, getGroupPosts as any);
+router.post('/:id/posts',          requireAuth, createGroupPost as any);
+export default router;

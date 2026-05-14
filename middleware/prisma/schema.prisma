@@ -1,0 +1,445 @@
+// ============================================================
+// KCE Connect — Prisma Schema (Project Level Overhaul)
+// Provider: PostgreSQL
+// ============================================================
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ── User ──────────────────────────────────────────────────────
+model User {
+  id            Int      @id @default(autoincrement())
+  email         String   @unique
+  rollNumber    String   @unique @map("roll_number")
+  name          String
+  role          String   @default("student") // student, staff, admin
+  department    String   @default("Karpagam College of Engineering")
+  
+  // Profile details
+  bio           String?  @db.Text
+  avatarUrl     String?  @map("avatar_url")
+  bannerUrl     String?  @map("banner_url")
+  
+  snowTicketRef String?  @map("snow_ticket_ref")
+  passwordHash  String?  @map("password_hash")
+
+  // Social Relations
+  posts           Post[]        @relation("authored")
+  likes           Like[]
+  reactions       Reaction[]
+  comments        Comment[]
+  bookmarks       Bookmark[]
+  
+  // Follower system
+  following       Follow[]      @relation("following")
+  followers       Follow[]      @relation("followers")
+
+  // Messaging
+  conversations   ConversationParticipant[]
+  sentMessages    Message[]
+
+  // Notifications
+  notifications   Notification[]
+
+  // ServiceNow integration
+  cachedTickets   CachedTicket[]
+  
+  // Events
+  eventRSVPs      EventRSVP[]
+  
+  // Emergency Tracking
+  emergencies     Emergency[]
+
+  // Groups & Clubs
+  groupMemberships  GroupMember[]
+  clubMemberships   ClubMember[]
+  groupPosts        GroupPost[]
+  adminOfGroups     StudyGroup[] @relation("GroupAdmin")
+  adminOfClubs      Club[]       @relation("ClubAdmin")
+
+  // Jobs
+  jobPosts        JobPost[]
+
+  // Resources
+  resources       Resource[]
+
+  // Gamification
+  karma           Int      @default(0)
+
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt       @map("updated_at")
+
+  @@index([rollNumber])
+  @@index([email])
+  @@map("users")
+}
+
+// ── Follow ────────────────────────────────────────────────────
+model Follow {
+  followerId  Int @map("follower_id")
+  followingId Int @map("following_id")
+
+  follower    User @relation("following", fields: [followerId], references: [id], onDelete: Cascade)
+  following   User @relation("followers", fields: [followingId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@id([followerId, followingId])
+  @@map("follows")
+}
+
+// ── Post ──────────────────────────────────────────────────────
+model Post {
+  id            Int      @id @default(autoincrement())
+  authorId      Int      @map("author_id")
+  author        User     @relation("authored", fields: [authorId], references: [id], onDelete: Cascade)
+  content       String   @db.Text
+  
+  // Media support
+  media         PostMedia[]
+  
+  hashtags      String?
+  flair         String?   // ACADEMIC, EVENTS, HOSTEL, SPORTS, TECH, FUN, ANNOUNCEMENT
+  
+  // Quote repost
+  quotedPostId  Int?      @map("quoted_post_id")
+  quotedPost    Post?     @relation("QuotedPost", fields: [quotedPostId], references: [id])
+  quotedBy      Post[]    @relation("QuotedPost")
+
+  likesCount    Int      @default(0) @map("likes_count")
+  commentsCount Int      @default(0) @map("comments_count")
+  
+  likes         Like[]
+  reactions     Reaction[]
+  comments      Comment[]
+  bookmarks     Bookmark[]
+  notifications Notification[]
+
+  isDeleted     Boolean  @default(false) @map("is_deleted")
+  timestamp     DateTime @default(now())
+  updatedAt     DateTime @updatedAt      @map("updated_at")
+
+  @@index([authorId, timestamp])
+  @@index([hashtags])
+  @@map("posts")
+}
+
+// ── PostMedia ─────────────────────────────────────────────────
+model PostMedia {
+  id        Int      @id @default(autoincrement())
+  postId    Int      @map("post_id")
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  url       String
+  type      String   @default("image") // image, video
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("post_media")
+}
+
+// ── Like ──────────────────────────────────────────────────────
+model Like {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  postId    Int      @map("post_id")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@unique([userId, postId])
+  @@map("likes")
+}
+
+// ── Comment ───────────────────────────────────────────────────
+model Comment {
+  id        Int      @id @default(autoincrement())
+  content   String   @db.Text
+  userId    Int      @map("user_id")
+  postId    Int      @map("post_id")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("comments")
+}
+
+// ── Notification ──────────────────────────────────────────────
+model Notification {
+  id          Int      @id @default(autoincrement())
+  recipientId Int      @map("recipient_id")
+  recipient   User     @relation(fields: [recipientId], references: [id], onDelete: Cascade)
+  
+  type        String   // LIKE, COMMENT, FOLLOW, MENTION, SYSTEM
+  actorId     Int?     @map("actor_id") // Person who triggered it
+  postId      Int?     @map("post_id")
+  
+  post        Post?    @relation(fields: [postId], references: [id])
+  
+  content     String?
+  isRead      Boolean  @default(false) @map("is_read")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@index([recipientId, isRead, createdAt])
+  @@map("notifications")
+}
+
+// ── Messaging ─────────────────────────────────────────────────
+model Conversation {
+  id           Int      @id @default(autoincrement())
+  isGroup      Boolean  @default(false) @map("is_group")
+  name         String?  // For group chats
+  
+  participants ConversationParticipant[]
+  messages     Message[]
+  
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt      @map("updated_at")
+
+  @@map("conversations")
+}
+
+model ConversationParticipant {
+  conversationId Int @map("conversation_id")
+  userId         Int @map("user_id")
+
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([conversationId, userId])
+  @@map("conversation_participants")
+}
+
+model Message {
+  id             Int      @id @default(autoincrement())
+  conversationId Int      @map("conversation_id")
+  senderId       Int      @map("sender_id")
+  
+  content        String   @db.Text
+  isRead         Boolean  @default(false) @map("is_read")
+  
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender         User         @relation(fields: [senderId], references: [id], onDelete: Cascade)
+
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  @@index([conversationId, createdAt])
+  @@map("messages")
+}
+
+// ── CampusEvent ───────────────────────────────────────────────
+model CampusEvent {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?  @db.Text
+  date        DateTime
+  venue       String
+  category    String
+  imageUrl    String?  @map("image_url")
+  
+  rsvps       EventRSVP[]
+  
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@map("campus_events")
+}
+
+model EventRSVP {
+  eventId   Int @map("event_id")
+  userId    Int @map("user_id")
+  
+  event     CampusEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  status    String      @default("INTERESTED") // INTERESTED, GOING
+  createdAt DateTime    @default(now()) @map("created_at")
+
+  @@id([eventId, userId])
+  @@map("event_rsvps")
+}
+
+// ── TrendingTopic ─────────────────────────────────────────────
+model TrendingTopic {
+  id        Int      @id @default(autoincrement())
+  tag       String   @unique
+  posts     Int      @default(0)
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("trending_topics")
+}
+
+// ── CachedTicket ───────────────────────────────────────────────
+model CachedTicket {
+  id            Int      @id @default(autoincrement())
+  sysId         String   @unique @map("sys_id")
+  number        String   @map("number")
+  status        String   @default("Open")
+  stateCode     String?  @map("state_code")
+  category      String?
+  description   String?  @db.Text
+  userRollNumber String  @map("user_roll_number")
+  user           User    @relation(fields: [userRollNumber], references: [rollNumber], onDelete: Cascade)
+  snowCreatedAt DateTime? @map("snow_created_at")
+  cachedAt      DateTime  @default(now()) @updatedAt @map("cached_at")
+
+  @@index([userRollNumber])
+  @@map("cached_tickets")
+}
+
+// ── Emergency ──────────────────────────────────────────────────
+model Emergency {
+  id          Int      @id @default(autoincrement())
+  userId      Int      @map("user_id")
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  location    String
+  status      String   @default("DISPATCHED") // DISPATCHED, RESOLVED, CANCELLED
+  snowIncidentId String? @map("snow_incident_id")
+  
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt      @map("updated_at")
+
+  @@index([userId])
+  @@map("emergencies")
+}
+
+// ── Reaction (6-type emotion system) ──────────────────────────
+model Reaction {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  postId    Int      @map("post_id")
+  type      String   // LIKE, CELEBRATE, INSIGHTFUL, HOT, SUPPORT, AGREE
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@unique([userId, postId])
+  @@index([postId, type])
+  @@map("reactions")
+}
+
+// ── Bookmark ──────────────────────────────────────────────────
+model Bookmark {
+  userId    Int      @map("user_id")
+  postId    Int      @map("post_id")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@id([userId, postId])
+  @@map("bookmarks")
+}
+
+// ── StudyGroup ────────────────────────────────────────────────
+model StudyGroup {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?  @db.Text
+  subject     String
+  department  String   @default("General")
+  isPrivate   Boolean  @default(false) @map("is_private")
+  coverImage  String?  @map("cover_image")
+  adminId     Int      @map("admin_id")
+  admin       User     @relation("GroupAdmin", fields: [adminId], references: [id], onDelete: Cascade)
+  members     GroupMember[]
+  posts       GroupPost[]
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@map("study_groups")
+}
+
+model GroupMember {
+  groupId   Int      @map("group_id")
+  userId    Int      @map("user_id")
+  role      String   @default("MEMBER") // MEMBER, MODERATOR, ADMIN
+  group     StudyGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  joinedAt  DateTime @default(now()) @map("joined_at")
+
+  @@id([groupId, userId])
+  @@map("group_members")
+}
+
+model GroupPost {
+  id        Int        @id @default(autoincrement())
+  groupId   Int        @map("group_id")
+  authorId  Int        @map("author_id")
+  content   String     @db.Text
+  group     StudyGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  author    User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  createdAt DateTime   @default(now()) @map("created_at")
+
+  @@map("group_posts")
+}
+
+// ── Club ──────────────────────────────────────────────────────
+model Club {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String?  @db.Text
+  category    String   // TECHNICAL, CULTURAL, SPORTS, SERVICE, ARTS
+  logoUrl     String?  @map("logo_url")
+  bannerUrl   String?  @map("banner_url")
+  adminId     Int      @map("admin_id")
+  admin       User     @relation("ClubAdmin", fields: [adminId], references: [id], onDelete: Cascade)
+  members     ClubMember[]
+  isVerified  Boolean  @default(false) @map("is_verified")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@map("clubs")
+}
+
+model ClubMember {
+  clubId    Int      @map("club_id")
+  userId    Int      @map("user_id")
+  role      String   @default("MEMBER") // MEMBER, CORE, ADMIN
+  club      Club     @relation(fields: [clubId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  joinedAt  DateTime @default(now()) @map("joined_at")
+
+  @@id([clubId, userId])
+  @@map("club_members")
+}
+
+// ── JobPost ───────────────────────────────────────────────────
+model JobPost {
+  id           Int      @id @default(autoincrement())
+  title        String
+  company      String
+  location     String
+  type         String   // FULL_TIME, INTERNSHIP, CONTRACT, ON_CAMPUS
+  description  String   @db.Text
+  requirements String?  @db.Text
+  applyUrl     String?  @map("apply_url")
+  salary       String?
+  deadline     DateTime?
+  postedById   Int      @map("posted_by_id")
+  postedBy     User     @relation(fields: [postedById], references: [id], onDelete: Cascade)
+  isActive     Boolean  @default(true) @map("is_active")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@index([type, isActive])
+  @@map("job_posts")
+}
+
+// ── Resource ──────────────────────────────────────────────────
+model Resource {
+  id           Int      @id @default(autoincrement())
+  title        String
+  description  String?  @db.Text
+  fileUrl      String   @map("file_url")
+  type         String   @default("NOTES") // NOTES, PAPER, BOOK, VIDEO, LINK
+  subject      String
+  semester     Int?     @default(0)
+  department   String   @default("General")
+  uploadedById Int      @map("uploaded_by_id")
+  uploadedBy   User     @relation(fields: [uploadedById], references: [id], onDelete: Cascade)
+  upvotes      Int      @default(0)
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@index([subject, department])
+  @@map("resources")
+}
