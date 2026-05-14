@@ -1,7 +1,6 @@
 /**
- * KCE Connect — Hybrid Login Page
- * 
- * Supports both legacy Email/Password and modern Google SSO.
+ * KCE Connect — LoginPage v13 "Supercool"
+ * Animated mesh bg · Glassmorphism form · Maroon glow
  */
 import { useState } from 'react';
 import React from 'react';
@@ -11,7 +10,6 @@ import toast from 'react-hot-toast';
 import { useNavigate, Link } from 'react-router-dom';
 import logoImg from '../assets/logo.png';
 
-/* ── Components ──────────────────────────────────────────────── */
 function GoogleLogo({ size = 20 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 48 48">
@@ -23,12 +21,12 @@ function GoogleLogo({ size = 20 }: { size?: number }) {
   );
 }
 
-function Spinner({ size = 18, color = 'currentColor' }: { size?: number; color?: string }) {
+function Spinner({ size = 18, color = '#fff' }: { size?: number; color?: string }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" style={{ animation: 'spin 0.7s linear infinite' }}>
-      <circle cx="12" cy="12" r="10" stroke={color} strokeOpacity="0.25" strokeWidth="3"/>
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" style={{ animation:'spin .7s linear infinite' }}>
+      <circle cx="12" cy="12" r="10" stroke={color} strokeOpacity=".2" strokeWidth="3"/>
       <path d="M12 2a10 10 0 0 1 10 10" stroke={color} strokeWidth="3" strokeLinecap="round"/>
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+      <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
     </svg>
   );
 }
@@ -36,417 +34,274 @@ function Spinner({ size = 18, color = 'currentColor' }: { size?: number; color?:
 export default function LoginPage() {
   const navigate = useNavigate();
   const { login, signInWithGoogle } = useAuth();
-  
+
   const [email,    setEmail]    = useState('');
   const [password, setPassword] = useState('');
   const [loading,  setLoading]  = useState(false);
+  const [focused,  setFocused]  = useState<string|null>(null);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!email || !password || loading) return;
     setLoading(true);
-    try {
-      await login(email, password);
-      toast.success('Welcome back!');
-      navigate('/');
-    } catch (err: any) {
-      toast.error(err.message || 'Login failed.');
-    } finally {
-      setLoading(false);
-    }
+    try { await login(email, password); toast.success('Welcome back!'); navigate('/'); }
+    catch (err: any) { toast.error(err.message || 'Login failed.'); }
+    finally { setLoading(false); }
   }
 
   async function handleGoogleSignIn() {
-    if (loading) return;
-    setLoading(true);
-    try {
-      await signInWithGoogle();
-      toast.success('Signed in with Google!');
-      navigate('/');
-    } catch (err: any) {
-      toast.error(err.message || 'Google Sign-In failed.');
-    } finally {
-      setLoading(false);
-    }
+    if (loading) return; setLoading(true);
+    try { await signInWithGoogle(); toast.success('Signed in!'); navigate('/'); }
+    catch (err: any) { toast.error(err.message || 'Google Sign-In failed.'); }
+    finally { setLoading(false); }
   }
 
   return (
     <PageTransition>
-      <div className="login-page-container">
-        {/* Left Side — Hero/Branding */}
-        <div className="login-hero-side">
-          <div className="hero-glow" />
-          <div className="hero-content">
-            <div className="hero-logo-box">
-              <img src={logoImg} alt="KCE Logo" className="hero-logo" />
+      <div style={{
+        minHeight:'100dvh', display:'flex', fontFamily:"'Inter',sans-serif",
+        background:'#080C14', position:'relative', overflow:'hidden',
+      }}>
+        {/* ── Animated background orbs ── */}
+        <div style={{ position:'absolute',inset:0,overflow:'hidden',pointerEvents:'none',zIndex:0 }}>
+          {/* Orb 1 — maroon */}
+          <div style={{ position:'absolute',top:'-10%',left:'-5%',width:'45%',height:'60%',background:'radial-gradient(circle,rgba(139,29,52,0.35) 0%,transparent 65%)',animation:'orbFloat1 12s ease-in-out infinite',borderRadius:'50%' }} />
+          {/* Orb 2 — blue */}
+          <div style={{ position:'absolute',bottom:'-10%',right:'-5%',width:'40%',height:'55%',background:'radial-gradient(circle,rgba(59,130,246,0.2) 0%,transparent 65%)',animation:'orbFloat2 15s ease-in-out infinite',borderRadius:'50%' }} />
+          {/* Orb 3 — purple */}
+          <div style={{ position:'absolute',top:'40%',right:'25%',width:'30%',height:'40%',background:'radial-gradient(circle,rgba(139,92,246,0.12) 0%,transparent 65%)',animation:'orbFloat3 18s ease-in-out infinite',borderRadius:'50%' }} />
+          {/* Grid overlay */}
+          <div style={{ position:'absolute',inset:0,backgroundImage:'linear-gradient(rgba(255,255,255,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.015) 1px,transparent 1px)',backgroundSize:'40px 40px',maskImage:'radial-gradient(ellipse at center,rgba(0,0,0,0.6) 0%,transparent 80%)' }} />
+        </div>
+
+        <style>{`
+          @keyframes orbFloat1 { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(3%,-4%) scale(1.06)} 66%{transform:translate(-2%,5%) scale(0.96)} }
+          @keyframes orbFloat2 { 0%,100%{transform:translate(0,0) scale(1)} 40%{transform:translate(-4%,3%) scale(1.08)} 70%{transform:translate(3%,-5%) scale(0.95)} }
+          @keyframes orbFloat3 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(5%,-6%) scale(1.1)} }
+        `}</style>
+
+        {/* ── Left Hero ── */}
+        <div style={{
+          flex:'0 0 48%', display:'flex', flexDirection:'column', justifyContent:'center',
+          alignItems:'flex-start', padding:'64px 72px', position:'relative', zIndex:1,
+        }}>
+          {/* Brand */}
+          <div style={{ display:'flex',alignItems:'center',gap:14,marginBottom:52 }}>
+            <div style={{
+              width:48,height:48,borderRadius:12,overflow:'hidden',
+              background:'rgba(139,29,52,0.15)',
+              border:'1px solid rgba(139,29,52,0.3)',
+              display:'flex',alignItems:'center',justifyContent:'center',
+              boxShadow:'0 4px 24px rgba(139,29,52,0.25)',
+              backdropFilter:'blur(8px)',
+            }}>
+              <img src={logoImg} alt="KCE" style={{ width:'80%',height:'80%',objectFit:'contain' }} />
             </div>
-            <h1 className="hero-title">
-              KCE<span className="accent">CONNECT</span>
+            <div>
+              <div style={{ fontSize:13,fontWeight:800,color:'rgba(255,255,255,0.9)',letterSpacing:'-.03em',lineHeight:1 }}>
+                KCE<span style={{ color:'#8B1D34' }}>Connect</span>
+              </div>
+              <div style={{ fontSize:9,color:'rgba(255,255,255,0.2)',letterSpacing:'.1em',textTransform:'uppercase',marginTop:2 }}>Campus Network</div>
+            </div>
+          </div>
+
+          {/* Hero text */}
+          <div style={{ marginBottom:40 }}>
+            <h1 style={{
+              fontSize:'clamp(40px,4.5vw,58px)', fontWeight:900,
+              lineHeight:1.0, letterSpacing:'-0.05em', color:'#F0F4FF', marginBottom:20,
+            }}>
+              Your campus,<br/>
+              <span style={{
+                background:'linear-gradient(135deg,#8B1D34,#E53E3E,#8B5CF6)',
+                backgroundSize:'200% 200%', animation:'gradShift 4s ease infinite',
+                WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', backgroundClip:'text',
+              }}>reimagined.</span>
             </h1>
-            <p className="hero-subtitle">
-              The professional digital ecosystem for Karpagam College of Engineering. 
-              Connect, collaborate, and excel.
+            <style>{`@keyframes gradShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}`}</style>
+            <p style={{ fontSize:16,color:'rgba(255,255,255,0.4)',lineHeight:1.7,fontWeight:400,maxWidth:380 }}>
+              The professional digital ecosystem for Karpagam College of Engineering. Connect, collaborate, and excel together.
             </p>
-            
-            <div className="hero-features">
-              <div className="feature-item">
-                <div className="feature-icon">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                </div>
-                <span>Campus-wide Networking</span>
-              </div>
-              <div className="feature-item">
-                <div className="feature-icon">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                </div>
-                <span>Secure Institutional Access</span>
-              </div>
-              <div className="feature-item">
-                <div className="feature-icon">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-                </div>
-                <span>Real-time Support Hub</span>
-              </div>
-            </div>
           </div>
-          
-          <div className="hero-footer">
-            © 2026 Karpagam College of Engineering • Institutional Protocol
+
+          {/* Feature bullets */}
+          <div style={{ display:'flex',flexDirection:'column',gap:16 }}>
+            {[
+              { icon:'⚡', label:'Real-time updates & announcements' },
+              { icon:'🔐', label:'Secure institutional access' },
+              { icon:'🤝', label:'Campus-wide networking' },
+              { icon:'🎯', label:'ITSM ticket management' },
+            ].map(({ icon, label }) => (
+              <div key={label} style={{ display:'flex',alignItems:'center',gap:12 }}>
+                <div style={{
+                  width:32,height:32,borderRadius:8,flexShrink:0,
+                  background:'rgba(255,255,255,0.04)',
+                  border:'1px solid rgba(255,255,255,0.07)',
+                  display:'flex',alignItems:'center',justifyContent:'center',
+                  fontSize:14,backdropFilter:'blur(8px)',
+                }}>
+                  {icon}
+                </div>
+                <span style={{ fontSize:13,fontWeight:500,color:'rgba(255,255,255,0.55)' }}>{label}</span>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ marginTop:'auto',paddingTop:60,fontSize:10,color:'rgba(255,255,255,0.15)',letterSpacing:'.12em',textTransform:'uppercase',fontWeight:600 }}>
+            © 2026 Karpagam College of Engineering
           </div>
         </div>
 
-        {/* Right Side — Authentication Form */}
-        <div className="login-form-side">
-          <div className="login-form-box">
-            <div className="form-header">
-              <h2 className="form-title">Account Sign-in</h2>
-              <p className="form-subtitle">Enter your official credentials to continue</p>
-            </div>
+        {/* ── Right Form ── */}
+        <div style={{
+          flex:1, display:'flex', justifyContent:'center', alignItems:'center',
+          padding:'48px 40px', position:'relative', zIndex:1,
+        }}>
+          <div style={{
+            width:'100%', maxWidth:400,
+            animation:'formSlide 0.5s cubic-bezier(.16,1,.3,1) both',
+          }}>
+            <style>{`@keyframes formSlide{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}`}</style>
 
-            <form onSubmit={handleSubmit} className="auth-form">
-              <div className="input-group">
-                <label className="input-label">Institutional Email</label>
-                <div className="input-wrapper">
-                  <svg className="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
-                  <input
-                    type="email"
-                    className="premium-input"
-                    placeholder="name@kce.ac.in"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-                </div>
+            {/* Glass form card */}
+            <div style={{
+              background:'rgba(255,255,255,0.05)',
+              backdropFilter:'blur(24px) saturate(160%)',
+              WebkitBackdropFilter:'blur(24px) saturate(160%)',
+              border:'1px solid rgba(255,255,255,0.08)',
+              borderRadius:24, padding:'36px 32px',
+              boxShadow:'0 8px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08)',
+              position:'relative', overflow:'hidden',
+            }}>
+              {/* Top shimmer line */}
+              <div style={{ position:'absolute',top:0,left:'10%',right:'10%',height:1,background:'linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent)',pointerEvents:'none' }} />
+
+              {/* Form header */}
+              <div style={{ marginBottom:28 }}>
+                <h2 style={{ fontSize:24,fontWeight:800,color:'#F0F4FF',letterSpacing:'-.04em',marginBottom:6 }}>
+                  Sign in
+                </h2>
+                <p style={{ fontSize:13,color:'rgba(255,255,255,0.35)',fontWeight:400 }}>
+                  Use your institutional credentials to continue
+                </p>
               </div>
 
-              <div className="input-group">
-                <label className="input-label">Security Password</label>
-                <div className="input-wrapper">
-                  <svg className="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                  <input
-                    type="password"
-                    className="premium-input"
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
-                </div>
-              </div>
-
-              <button type="submit" className="login-submit-btn" disabled={loading}>
-                {loading ? <Spinner color="#fff" /> : 'Sign In'}
+              {/* Google SSO — primary CTA */}
+              <button type="button" onClick={handleGoogleSignIn} disabled={loading}
+                style={{
+                  width:'100%',height:48,
+                  background:'rgba(255,255,255,0.08)',
+                  border:'1px solid rgba(255,255,255,0.12)',
+                  borderRadius:12,display:'flex',alignItems:'center',justifyContent:'center',gap:10,
+                  fontSize:14,fontWeight:600,color:'rgba(255,255,255,0.85)',
+                  cursor:'pointer',fontFamily:"'Inter',sans-serif",
+                  transition:'all .15s ease',marginBottom:20,
+                  backdropFilter:'blur(8px)',
+                }}
+                onMouseEnter={e=>{const el=e.currentTarget as HTMLElement;el.style.background='rgba(255,255,255,0.13)';el.style.borderColor='rgba(255,255,255,0.2)';}}
+                onMouseLeave={e=>{const el=e.currentTarget as HTMLElement;el.style.background='rgba(255,255,255,0.08)';el.style.borderColor='rgba(255,255,255,0.12)';}}
+              >
+                {loading?<Spinner color="rgba(255,255,255,0.8)"/>:<><GoogleLogo size={18}/> Continue with Karpagam ID</>}
               </button>
-            </form>
 
-            <div className="form-divider">
-              <span className="divider-text">Institutional SSO</span>
+              {/* Divider */}
+              <div style={{ display:'flex',alignItems:'center',gap:12,marginBottom:20 }}>
+                <div style={{ flex:1,height:1,background:'rgba(255,255,255,0.07)' }} />
+                <span style={{ fontSize:10,fontWeight:700,color:'rgba(255,255,255,0.2)',textTransform:'uppercase',letterSpacing:'.1em' }}>or email</span>
+                <div style={{ flex:1,height:1,background:'rgba(255,255,255,0.07)' }} />
+              </div>
+
+              {/* Form */}
+              <form onSubmit={handleSubmit}>
+                <div style={{ marginBottom:14 }}>
+                  <label style={{ fontSize:10,fontWeight:700,color:'rgba(255,255,255,0.3)',textTransform:'uppercase',letterSpacing:'.08em',display:'block',marginBottom:6 }}>
+                    Email
+                  </label>
+                  <div style={{ position:'relative' }}>
+                    <svg style={{ position:'absolute',left:13,top:'50%',transform:'translateY(-50%)',color:'rgba(255,255,255,0.2)',pointerEvents:'none' }} width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                    <input type="email" placeholder="name@kce.ac.in"
+                      value={email} onChange={e=>setEmail(e.target.value)} required
+                      onFocus={()=>setFocused('email')} onBlur={()=>setFocused(null)}
+                      style={{
+                        width:'100%',height:46,paddingLeft:40,paddingRight:14,
+                        background: focused==='email'?'rgba(255,255,255,0.07)':'rgba(255,255,255,0.04)',
+                        border:`1px solid ${focused==='email'?'rgba(139,29,52,0.6)':'rgba(255,255,255,0.08)'}`,
+                        borderRadius:10,fontSize:13,color:'#F0F4FF',
+                        outline:'none',fontFamily:"'Inter',sans-serif",
+                        transition:'all .15s',
+                        boxShadow: focused==='email'?'0 0 0 3px rgba(139,29,52,0.1)':'none',
+                      }}
+                    />
+                  </div>
+                </div>
+
+                <div style={{ marginBottom:20 }}>
+                  <label style={{ fontSize:10,fontWeight:700,color:'rgba(255,255,255,0.3)',textTransform:'uppercase',letterSpacing:'.08em',display:'block',marginBottom:6 }}>
+                    Password
+                  </label>
+                  <div style={{ position:'relative' }}>
+                    <svg style={{ position:'absolute',left:13,top:'50%',transform:'translateY(-50%)',color:'rgba(255,255,255,0.2)',pointerEvents:'none' }} width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    <input type="password" placeholder="••••••••"
+                      value={password} onChange={e=>setPassword(e.target.value)} required
+                      onFocus={()=>setFocused('password')} onBlur={()=>setFocused(null)}
+                      style={{
+                        width:'100%',height:46,paddingLeft:40,paddingRight:14,
+                        background: focused==='password'?'rgba(255,255,255,0.07)':'rgba(255,255,255,0.04)',
+                        border:`1px solid ${focused==='password'?'rgba(139,29,52,0.6)':'rgba(255,255,255,0.08)'}`,
+                        borderRadius:10,fontSize:14,color:'#F0F4FF',
+                        outline:'none',fontFamily:"'Inter',sans-serif",
+                        transition:'all .15s',
+                        boxShadow: focused==='password'?'0 0 0 3px rgba(139,29,52,0.1)':'none',
+                      }}
+                    />
+                  </div>
+                </div>
+
+                {/* Submit */}
+                <button type="submit" disabled={loading}
+                  style={{
+                    width:'100%',height:48,
+                    background:'linear-gradient(135deg,#A52444,#6B1528)',
+                    color:'#fff',border:'none',borderRadius:12,
+                    fontSize:14,fontWeight:700,cursor:'pointer',
+                    fontFamily:"'Inter',sans-serif",
+                    boxShadow:'0 4px 20px rgba(139,29,52,0.4)',
+                    transition:'all .15s',display:'flex',alignItems:'center',justifyContent:'center',gap:8,
+                    position:'relative',overflow:'hidden',
+                  }}
+                  onMouseEnter={e=>{ if(!loading){const el=e.currentTarget as HTMLElement;el.style.transform='translateY(-1px)';el.style.boxShadow='0 6px 28px rgba(139,29,52,0.5)';el.style.filter='brightness(1.08)';} }}
+                  onMouseLeave={e=>{ const el=e.currentTarget as HTMLElement;el.style.transform='translateY(0)';el.style.boxShadow='0 4px 20px rgba(139,29,52,0.4)';el.style.filter='none'; }}
+                >
+                  {loading ? <Spinner /> : <>Sign In →</>}
+                </button>
+              </form>
+
+              {/* Footer */}
+              <div style={{ textAlign:'center',marginTop:20,fontSize:12,color:'rgba(255,255,255,0.25)' }}>
+                No account?{' '}
+                <Link to="/register" style={{ color:'rgba(165,36,68,0.9)',fontWeight:700 }}>
+                  Create one
+                </Link>
+              </div>
             </div>
 
-            <button
-              type="button"
-              className="google-sso-btn"
-              onClick={handleGoogleSignIn}
-              disabled={loading}
-            >
-              {loading ? <Spinner color="var(--text-primary)" /> : <><GoogleLogo /> Sign in with Karpagam ID</>}
-            </button>
-
-            <div className="form-footer">
-              Don't have an account? <Link to="/register" className="register-link">Create an account</Link>
+            {/* Trust indicators */}
+            <div style={{ display:'flex',justifyContent:'center',gap:20,marginTop:20,flexWrap:'wrap' }}>
+              {['🔒 Encrypted','🏛️ Institutional','✓ Verified'].map(t => (
+                <span key={t} style={{ fontSize:10,fontWeight:600,color:'rgba(255,255,255,0.2)',letterSpacing:'.04em' }}>{t}</span>
+              ))}
             </div>
           </div>
         </div>
+
+        {/* Mobile — full width form */}
+        <style>{`
+          @media(max-width:768px){
+            div[style*="flex: 0 0 48%"]{display:none!important;}
+            div[style*="flex: 1"]{padding:24px 16px!important;}
+          }
+        `}</style>
       </div>
-
-      <style>{`
-        .login-page-container {
-          min-height: 100dvh;
-          display: flex;
-          background: #fff;
-          font-family: var(--font);
-        }
-
-        /* ── Hero Side ── */
-        .login-hero-side {
-          flex: 0 0 45%;
-          background: var(--navy);
-          color: #fff;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: flex-start;
-          padding: 60px 80px;
-          position: relative;
-          overflow: hidden;
-        }
-        .hero-glow {
-          position: absolute;
-          top: -20%;
-          left: -20%;
-          width: 80%;
-          height: 80%;
-          background: radial-gradient(circle, rgba(166,25,46,0.15) 0%, transparent 70%);
-          pointer-events: none;
-        }
-        .hero-content {
-          position: relative;
-          z-index: 10;
-          width: 100%;
-          max-width: 440px;
-        }
-        .hero-logo-box {
-          width: 80px;
-          height: 80px;
-          background: rgba(255,255,255,0.03);
-          backdrop-filter: blur(10px);
-          border: 1px solid rgba(255,255,255,0.1);
-          border-radius: 20px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          margin-bottom: 40px;
-          box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-        }
-        .hero-logo {
-          width: 80%;
-          height: 80%;
-          object-fit: contain;
-        }
-        .hero-title {
-          font-size: 52px;
-          font-weight: 950;
-          letter-spacing: -0.05em;
-          line-height: 0.9;
-          margin-bottom: 24px;
-        }
-        .hero-title .accent {
-          color: var(--crimson);
-        }
-        .hero-subtitle {
-          font-size: 17px;
-          color: rgba(255,255,255,0.5);
-          line-height: 1.6;
-          margin-bottom: 48px;
-          font-weight: 500;
-        }
-        .hero-features {
-          display: flex;
-          flex-direction: column;
-          gap: 20px;
-        }
-        .feature-item {
-          display: flex;
-          align-items: center;
-          gap: 16px;
-          font-size: 15px;
-          font-weight: 600;
-          color: rgba(255,255,255,0.8);
-        }
-        .feature-icon {
-          width: 32px;
-          height: 32px;
-          background: rgba(255,255,255,0.05);
-          border-radius: 8px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 14px;
-        }
-        .hero-footer {
-          position: absolute;
-          bottom: 40px;
-          left: 80px;
-          font-size: 11px;
-          color: rgba(255,255,255,0.2);
-          text-transform: uppercase;
-          letter-spacing: 0.1em;
-          font-weight: 700;
-        }
-
-        /* ── Form Side ── */
-        .login-form-side {
-          flex: 1;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          padding: 40px;
-          background: #fff;
-        }
-        .login-form-box {
-          width: 100%;
-          max-width: 400px;
-          animation: formEnter 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
-        }
-        @keyframes formEnter {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .form-header {
-          margin-bottom: 40px;
-        }
-        .form-title {
-          font-size: 32px;
-          font-weight: 800;
-          color: #0F172A;
-          letter-spacing: -0.04em;
-          margin-bottom: 8px;
-        }
-        .form-subtitle {
-          color: #64748B;
-          font-weight: 500;
-          font-size: 15px;
-        }
-        .auth-form {
-          display: flex;
-          flex-direction: column;
-          gap: 24px;
-        }
-        .input-group {
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
-        }
-        .input-label {
-          font-size: 13px;
-          font-weight: 700;
-          color: #475569;
-          letter-spacing: 0.02em;
-        }
-        .input-wrapper {
-          position: relative;
-          display: flex;
-          align-items: center;
-        }
-        .input-icon {
-          position: absolute;
-          left: 16px;
-          color: #94A3B8;
-          pointer-events: none;
-        }
-        .premium-input {
-          width: 100%;
-          height: 52px;
-          padding: 0 16px 0 48px;
-          background: #F8FAFC;
-          border: 1px solid #E2E8F0;
-          border-radius: 12px;
-          font-size: 15px;
-          font-weight: 500;
-          color: #1E293B;
-          transition: all 0.2s;
-          outline: none;
-        }
-        .premium-input:focus {
-          background: #fff;
-          border-color: #0F172A;
-          box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.05);
-        }
-        .login-submit-btn {
-          height: 52px;
-          background: #0F172A;
-          color: #fff;
-          border: none;
-          border-radius: 12px;
-          font-size: 16px;
-          font-weight: 700;
-          cursor: pointer;
-          transition: all 0.2s;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          margin-top: 8px;
-        }
-        .login-submit-btn:hover {
-          background: #1E293B;
-          transform: translateY(-1px);
-          box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-        .login-submit-btn:active {
-          transform: translateY(0);
-        }
-        .form-divider {
-          display: flex;
-          align-items: center;
-          margin: 32px 0;
-        }
-        .form-divider::before,
-        .form-divider::after {
-          content: "";
-          flex: 1;
-          height: 1px;
-          background: #E2E8F0;
-        }
-        .divider-text {
-          padding: 0 16px;
-          font-size: 12px;
-          font-weight: 700;
-          color: #94A3B8;
-          text-transform: uppercase;
-          letter-spacing: 0.1em;
-        }
-        .google-sso-btn {
-          width: 100%;
-          height: 52px;
-          background: #fff;
-          border: 1px solid #E2E8F0;
-          border-radius: 12px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 12px;
-          font-size: 15px;
-          font-weight: 600;
-          color: #1E293B;
-          cursor: pointer;
-          transition: all 0.2s;
-        }
-        .google-sso-btn:hover {
-          background: #F8FAFC;
-          border-color: #CBD5E1;
-        }
-        .form-footer {
-          text-align: center;
-          margin-top: 32px;
-          font-size: 14px;
-          color: #64748B;
-          font-weight: 500;
-        }
-        .register-link {
-          color: var(--crimson);
-          font-weight: 700;
-          text-decoration: none;
-        }
-        .register-link:hover {
-          text-decoration: underline;
-        }
-
-        @media (max-width: 768px) {
-          .login-hero-side { display: none; }
-          .login-form-side { padding: 24px 20px; }
-          .login-form-box { max-width: 100%; }
-        }
-      `}</style>
     </PageTransition>
   );
 }
