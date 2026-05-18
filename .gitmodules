@@ -1,0 +1,4 @@
+[submodule "servicenow-config"]
+	path = servicenow-config
+	url = https://gitlab.com/Nithish-o7/karpagam-service-portal.git
+	branch = sn_instances/dev319062
