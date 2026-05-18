@@ -1,0 +1,39 @@
+# ============================================================
+# Render.com Deployment Blueprint — KCE Connect Middleware
+# Deploys the Express.js backend API on Render's free tier.
+# https://render.com/docs/blueprint-spec
+# ============================================================
+
+services:
+  - type: web
+    name: kce-connect-middleware
+    runtime: node
+    region: singapore          # Closest to India
+    plan: free
+    rootDir: middleware
+    buildCommand: npm install && npm run build
+    startCommand: node dist/index.js
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: DATABASE_URL
+        sync: false            # Set manually in Render dashboard
+      - key: DIRECT_DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true    # Render auto-generates a random value
+      - key: FRONTEND_ORIGIN
+        sync: false            # Set to your Vercel URL after deploy
+      - key: SERVICENOW_INSTANCE_URL
+        sync: false
+      - key: SERVICENOW_USERNAME
+        sync: false
+      - key: SERVICENOW_PASSWORD
+        sync: false
+      - key: SERVICENOW_TABLE
+        value: x_kce_campus_request
+      - key: FIREBASE_SERVICE_ACCOUNT
+        sync: false            # Paste your Firebase service account JSON
