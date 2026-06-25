@@ -36,22 +36,6 @@ The application bridges two distinct worlds:
 
 ---
 
-## 🎨 Brand Design & Color space
-
-KCE Connect incorporates the official **Karpagam College of Engineering** academic identity system:
-
-| Color | Hex | Role in Interface | Element Reference |
-| :--- | :--- | :--- | :--- |
-| **Karpagam Crimson** | `#A6192E` | **Primary Brand Color** | Headers, primary buttons, logo marks, alert cards |
-| **Campus Navy** | `#1A2254` | **Secondary Brand Color** | Tab bars, navigation panels, headers, active states |
-| **Innovation Blue** | `#4A5FD9` | **Accent Highlight** | Direct links, "In Progress" states, interactive widgets |
-| **Success Green** | `#28A745` | **Status / Complete** | "Resolved" status badges, SLA targets met |
-| **Warning Gold** | `#FFC107` | **Status / Pending** | "New" status badges, SLA near-breach markers |
-
-> For further typography, spacing configurations, and branding requirements, see the full [Brand Guidelines](brandGuidelines.md).
-
----
-
 ## ⚡ Interactive Key Features
 
 <table>
@@ -193,18 +177,6 @@ graph TD
     </td>
   </tr>
 </table>
-
----
-
-## ✨ Premium UI & Interaction Elements
-
-KCE Connect integrates custom animations and interactions to create a premium user experience:
-
-*   🔄 **Smooth Micro-Animations**: Interactivity on likes, bookmark taps, reactions, and navigation changes using Framer Motion spring physics.
-*   💫 **StarBorder Component**: Modern cards and buttons feature a subtle rotating glowing border to guide focus.
-*   🌊 **LineWaves Component**: Dynamic, animated wave grids serve as canvas backgrounds.
-*   📝 **BlurText & SplitText**: Clean entry animations for headers, titles, and welcome widgets.
-*   ⚓ **Interactive Dock Component**: A responsive dock menu for desktop views.
 
 ---
 
