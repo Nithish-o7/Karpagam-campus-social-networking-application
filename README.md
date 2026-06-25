@@ -1,77 +1,127 @@
 # <p align="center"><img src="public/banner.png" alt="KCE Connect Banner" width="100%"></p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React Badge">
-  <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript Badge">
-  <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite Badge">
-  <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js Badge">
-  <img src="https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white" alt="Express Badge">
-  <img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL Badge">
-  <img src="https://img.shields.io/badge/Prisma-39827B?style=for-the-badge&logo=prisma&logoColor=white" alt="Prisma Badge">
-  <img src="https://img.shields.io/badge/ServiceNow-293E40?style=for-the-badge&logo=servicenow&logoColor=white" alt="ServiceNow Badge">
-  <img src="https://img.shields.io/badge/Socket.io-010101?style=for-the-badge&logo=socket.io&logoColor=white" alt="Socket.io Badge">
-  <img src="https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black" alt="Firebase Badge">
+  <a href="https://github.com/Nithish-o7/Karpagam-campus-social-networking-application/commits/developer">
+    <img src="https://img.shields.io/github/last-commit/Nithish-o7/Karpagam-campus-social-networking-application/developer?style=for-the-badge&color=A6192E&logo=github" alt="Last Commit">
+  </a>
+  <a href="https://github.com/Nithish-o7/Karpagam-campus-social-networking-application/pulls">
+    <img src="https://img.shields.io/github/issues-pr/Nithish-o7/Karpagam-campus-social-networking-application?style=for-the-badge&color=1A2254&logo=git" alt="Pull Requests">
+  </a>
+  <img src="https://img.shields.io/badge/Status-Active-28A745?style=for-the-badge&logo=statuspage&logoColor=white" alt="Status Active">
+  <img src="https://img.shields.io/badge/PRs-Welcome-4A5FD9?style=for-the-badge" alt="PRs Welcome">
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/React-19.2-20232A?style=flat-square&logo=react&logoColor=61DAFB" alt="React">
+  <img src="https://img.shields.io/badge/TypeScript-5.9-007ACC?style=flat-square&logo=typescript&logoColor=white" alt="TS">
+  <img src="https://img.shields.io/badge/Vite-8.0-646CFF?style=flat-square&logo=vite&logoColor=white" alt="Vite">
+  <img src="https://img.shields.io/badge/Node.js-20.x-339933?style=flat-square&logo=nodedotjs&logoColor=white" alt="Node">
+  <img src="https://img.shields.io/badge/Express-4.x-000000?style=flat-square&logo=express&logoColor=white" alt="Express">
+  <img src="https://img.shields.io/badge/PostgreSQL-15+-316192?style=flat-square&logo=postgresql&logoColor=white" alt="Postgres">
+  <img src="https://img.shields.io/badge/Prisma-6.x-39827B?style=flat-square&logo=prisma&logoColor=white" alt="Prisma">
+  <img src="https://img.shields.io/badge/ServiceNow-Washington-293E40?style=flat-square&logo=servicenow&logoColor=white" alt="SNOW">
+  <img src="https://img.shields.io/badge/Socket.io-4.x-010101?style=flat-square&logo=socket.io&logoColor=white" alt="Socket">
+  <img src="https://img.shields.io/badge/Firebase-12.x-FFCA28?style=flat-square&logo=firebase&logoColor=black" alt="Firebase">
 </p>
 
 ---
 
-## 📖 Project Overview
+## 📖 Introduction
 
-**KCE Connect** (Karpagam Campus Social Hub & ITSM Portal) is a highly integrated, modern, full-stack campus platform developed exclusively for the students, faculty, staff, and alumni of **Karpagam College of Engineering**.
+**KCE Connect** (Karpagam Campus Social Hub & ITSM Portal) is a highly integrated, premium full-stack campus platform developed exclusively for the students, faculty, staff, and alumni of **Karpagam College of Engineering**.
 
-The application operates as a dual-purpose platform:
-1. **Modern Campus Social Hub**: A vibrant, real-time social feed (similar to Instagram/Reddit) with chronological post streams, rich media uploads, 6-type emotional reaction systems, study groups, event sign-ups, interactive polls, a placement job board, and socket-driven direct messaging.
-2. **Headless ITSM ServiceNow Portal**: A streamlined campus issue reporting workflow. Submitting a ticket instantly forwards data to a custom scoped application on a **ServiceNow Developer Instance**, syncing status updates, SLA countdowns, and routing logs directly back to the student's dashboard—without requiring them to log into the ServiceNow console.
-
----
-
-## ✨ Key Features
-
-### 1. 📢 Campus Social Feed & Highlights
-- **Infinite Chronological Feed**: View posts, notices, and updates from fellow peers and campus authorities.
-- **Rich Media & Post Customization**: Support for image and video attachments (stored in Firebase), custom hashtags, and category flairs (`ACADEMIC`, `EVENTS`, `HOSTEL`, `SPORTS`, `TECH`, `FUN`, `ANNOUNCEMENT`).
-- **Interactive Polls**: Embed options, gather opinions, and view real-time voter statistics.
-- **Engagement Mechanics**: 6 distinct custom emotional reactions (`LIKE`, `CELEBRATE`, `INSIGHTFUL`, `HOT`, `SUPPORT`, `AGREE`), comment threads, and bookmarking.
-- **User Verification**: Roles (`Student`, `Faculty`, `Staff`, `Alumni`) displayed as distinctive profile badges. Only verified `@kce.ac.in` domain users are permitted to register.
-
-### 2. 🎫 ServiceNow Headless ITSM Bridge
-- **Service Request Form**: Submit issues across key categories (WiFi, Labs, Electricity, Hostel, Transport, Classroom) with exact block and room mapping, along with photo attachments.
-- **Automated Routing**: Submissions map directly to `x_kce_campus_request` in ServiceNow, automatically assigning incidents to specialized groups (e.g., *Network Team*, *Hostel Management*).
-- **Live Sync & Fallback Caching**: Real-time retrieval of ticket statuses (`New`, `Work in Progress`, `Resolved`) and SLA indicators. In case ServiceNow is unreachable, the system falls back to a locally cached database state.
-
-### 3. 💬 Real-Time Messaging & Study Groups
-- **Direct & Group Chats**: Powered by `Socket.io` for latency-free messaging, typing indicators, and read receipts.
-- **Departmental Study Groups**: Join or moderate academic interest groups. Post notes, schedule study sessions, and message members.
-
-### 4. 💼 Career Center & Placement Hub
-- **Job & Internship Board**: Filters for internship, full-time, contract, and on-campus positions.
-- **Applications & Bookmarks**: Details on job requirements, company profiles, salaries, and deadline tracking.
-
-### 5. 📚 Academic Resource Sharing
-- **Material Repository**: Upload and download study resources, textbook PDFs, notes, and previous semester question papers.
-- **Upvote System**: Community-curated quality filtering with categorization by department, subject code, and semester.
-
-### 6. 🚨 Emergency SOS Dispatch
-- **SOS Button**: Instantly triggers an emergency incident with location information.
-- **Priority Sync**: Instantly creates a critical P1 incident on the ServiceNow backend, dispatching campus security.
+The application bridges two distinct worlds:
+*   📢 **Interactive Campus Social Hub**: A modern social space (similar to Reddit/Instagram) built with rich media uploads, 6-type emotional reaction models, study groups, job placement boards, and real-time Socket.io-based chat rooms.
+*   🎫 **Headless ITSM Integration**: A simplified issue-reporting system linked directly to the **ServiceNow Developer Instance**. Submitting campus issues automatically creates incidents, enforces SLA countdowns, and details updates directly to users without exposing the complexity of the ServiceNow portal.
 
 ---
 
-## 🛠️ Technology Stack
+## 🎨 Brand Design & Color space
 
-| Layer | Technologies & Frameworks | Description |
-|---|---|---|
-| **Frontend (Client)** | React 19, TypeScript, Vite, React Router Dom, Framer Motion, GSAP, Lucide Icons | Premium UI experience, smooth micro-animations, fast hot module replacement, and clean layout flow. |
-| **Middleware (Proxy)** | Node.js, Express, TypeScript, JWT, Socket.io | Secure API router, real-time socket controller, and proxy layer for ServiceNow REST API. |
-| **Database (ORM)** | PostgreSQL, Prisma ORM | Stores social content, accounts, message logs, and caching layer for ServiceNow tickets. |
-| **Cloud Services** | Firebase Auth & Firebase Storage | Secure passwordless or credential-based accounts and scalable cloud storage for post attachments. |
-| **Backend ITSM** | ServiceNow REST Table API | Enterprise-grade ITSM ticket routing, SLA enforcement, and assignment groups. |
+KCE Connect incorporates the official **Karpagam College of Engineering** academic identity system:
+
+| Color | Hex | Role in Interface | Element Reference |
+| :--- | :--- | :--- | :--- |
+| **Karpagam Crimson** | `#A6192E` | **Primary Brand Color** | Headers, primary buttons, logo marks, alert cards |
+| **Campus Navy** | `#1A2254` | **Secondary Brand Color** | Tab bars, navigation panels, headers, active states |
+| **Innovation Blue** | `#4A5FD9` | **Accent Highlight** | Direct links, "In Progress" states, interactive widgets |
+| **Success Green** | `#28A745` | **Status / Complete** | "Resolved" status badges, SLA targets met |
+| **Warning Gold** | `#FFC107` | **Status / Pending** | "New" status badges, SLA near-breach markers |
+
+> For further typography, spacing configurations, and branding requirements, see the full [Brand Guidelines](brandGuidelines.md).
 
 ---
 
-## 📐 Architecture & Flow Diagrams
+## ⚡ Interactive Key Features
 
-### High-Level System Architecture
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <h3>📢 Social Feed & Discussion</h3>
+      <ul>
+        <li><b>Infinite Stream</b>: Scroll chronologically through announcements, campus news, and peer posts.</li>
+        <li><b>Rich Media Uploads</b>: Support for images and video posts stored via Firebase.</li>
+        <li><b>Categorized Flairs</b>: Tag posts with flairs like <code>ACADEMIC</code>, <code>EVENTS</code>, <code>HOSTEL</code>, <code>SPORTS</code>, <code>TECH</code>, <code>FUN</code>, <code>ANNOUNCEMENT</code>.</li>
+        <li><b>Engagement Models</b>: Upvote, bookmark, comment, and react using 6 emotion types: <i>Like, Celebrate, Insightful, Hot, Support, Agree</i>.</li>
+      </ul>
+    </td>
+    <td width="50%" valign="top">
+      <h3>🎫 Headless ITSM ServiceNow Bridge</h3>
+      <ul>
+        <li><b>Record Producer Form</b>: Report issues (Wifi, Lab, Electricity, Hostel, Transport, Classroom) with block/room locations.</li>
+        <li><b>Auto Routing & SLAs</b>: Incidents are automatically assigned to ServiceNow groups (e.g. <i>Network Team</i>, <i>Hostel Management</i>).</li>
+        <li><b>Caching & Fallback</b>: Real-time ticket sync using local PostgreSQL cache as a fallback if the ServiceNow server sleeps.</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <h3>💬 Real-Time Socket Messaging</h3>
+      <ul>
+        <li><b>Private & Group Channels</b>: Powered by <code>Socket.io</code> for real-time messaging.</li>
+        <li><b>Real-time Indicators</b>: Typing prompts, unread notification counts, and instant status updates.</li>
+        <li><b>Department Study Groups</b>: Custom message boards, note sharing, and moderator actions.</li>
+      </ul>
+    </td>
+    <td width="50%" valign="top">
+      <h3>🚨 Priority Emergency SOS Dispatch</h3>
+      <ul>
+        <li><b>SOS Panic Trigger</b>: Single-tap emergency alarm sharing GPS or campus room coordinates.</li>
+        <li><b>ServiceNow P1 Incident Creation</b>: Instantly routes a high-priority ticket to Campus Security, bypassing typical triage queues for safety.</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <h3>💼 Placement Job Board</h3>
+      <ul>
+        <li><b>Career Tracker</b>: Find on-campus internships, contracts, and full-time placement drives.</li>
+        <li><b>Saved Postings</b>: Bookmark job descriptions, requirement matrices, deadlines, and direct apply links.</li>
+      </ul>
+    </td>
+    <td width="50%" valign="top">
+      <h3>📚 Shared Academic Library</h3>
+      <ul>
+        <li><b>Resource Repository</b>: Upload and download notes, semester papers, syllabus guidelines, and books.</li>
+        <li><b>Peer Endorsements</b>: Upvote resources to filter quality materials, categorized by code/semester.</li>
+      </ul>
+    </td>
+  </tr>
+</table>
+
+---
+
+## 🛠️ Improved Technology Stack
+
+KCE Connect uses a decoupled architecture designed for speed, resilience, and high-quality visuals.
+
+```
+📁 Karpagam Campus Social Networking Application
+├── 📁 src/ (Frontend Source)
+├── 📁 frontend/ (Frontend Subproject - React 19 Client)
+├── 📁 middleware/ (Backend Subproject - Node API Proxy)
+└── 📁 servicenow-config/ (Submodule - ServiceNow Scoped App Update Sets)
+```
 
 ```mermaid
 graph TD
@@ -106,7 +156,61 @@ graph TD
     class I itsm;
 ```
 
-### ServiceNow Bridge Request Lifecycle
+### Stack Breakdown
+
+<table>
+  <tr>
+    <td width="33%" valign="top">
+      <h3>🌐 Frontend Client</h3>
+      <ul>
+        <li><b>React 19 & TS</b>: Strict component types and fast HMR builds.</li>
+        <li><b>Vite 8.0</b>: Instant hot reloading and build optimization.</li>
+        <li><b>Framer Motion & GSAP</b>: Controls animations, transitions, and micro-interactions.</li>
+        <li><b>Socket.io Client</b>: Connects to the real-time message stream.</li>
+        <li><b>Lucide React</b>: Modern icons.</li>
+      </ul>
+      <p><i>Code entry:</i> <code>frontend/src/</code></p>
+    </td>
+    <td width="33%" valign="top">
+      <h3>⚙️ Middleware Proxy</h3>
+      <ul>
+        <li><b>Express.js</b>: High-performance routing system with global error handlers.</li>
+        <li><b>JWT Credentials</b>: Role verification and email constraints.</li>
+        <li><b>Socket.io Server</b>: Manages connections, typing events, and message caching.</li>
+        <li><b>Prisma Client</b>: Type-safe database queries.</li>
+      </ul>
+      <p><i>Code entry:</i> <code>middleware/src/</code></p>
+    </td>
+    <td width="33%" valign="top">
+      <h3>🗄️ Persistence & Cloud</h3>
+      <ul>
+        <li><b>PostgreSQL</b>: Relational database storing social feeds, chat logs, and users.</li>
+        <li><b>Prisma ORM</b>: Manages database pushes and schema changes.</li>
+        <li><b>Firebase Auth</b>: Secure campus registration.</li>
+        <li><b>Firebase Storage</b>: Media assets and post attachment hosting.</li>
+      </ul>
+      <p><i>Code entry:</i> <code>middleware/prisma/</code></p>
+    </td>
+  </tr>
+</table>
+
+---
+
+## ✨ Premium UI & Interaction Elements
+
+KCE Connect integrates custom animations and interactions to create a premium user experience:
+
+*   🔄 **Smooth Micro-Animations**: Interactivity on likes, bookmark taps, reactions, and navigation changes using Framer Motion spring physics.
+*   💫 **StarBorder Component**: Modern cards and buttons feature a subtle rotating glowing border to guide focus.
+*   🌊 **LineWaves Component**: Dynamic, animated wave grids serve as canvas backgrounds.
+*   📝 **BlurText & SplitText**: Clean entry animations for headers, titles, and welcome widgets.
+*   ⚓ **Interactive Dock Component**: A responsive dock menu for desktop views.
+
+---
+
+## 🔄 ServiceNow Bridge Request Lifecycle
+
+Below is the execution flow when a campus issue is reported:
 
 ```mermaid
 sequenceDiagram
@@ -135,17 +239,17 @@ sequenceDiagram
 
 ---
 
-## 🚀 Installation & Local Setup
+## 🚀 Installation & Local Development
 
-Follow these steps to run the complete KCE Connect platform locally.
+Set up and run KCE Connect on your local machine using the guidelines below.
 
 ### 📋 Prerequisites
-- **Node.js** (v18 or higher recommended)
+- **Node.js** (v18 or higher)
 - **PostgreSQL** (v15 or higher)
-- **Firebase Project** (Auth enabled & Storage bucket set up)
-- **ServiceNow Developer Instance** (with custom table `x_kce_campus_request` configured)
+- **Firebase Project** (Auth & Storage enabled)
+- **ServiceNow Developer Instance** (with table `x_kce_campus_request` configured)
 
-### 1. Repository Setup & Submodules
+### 1. Repository Setup & Submodule Sync
 Clone the repository and initialize submodules:
 ```bash
 git clone https://github.com/Nithish-o7/Karpagam-campus-social-networking-application.git
@@ -153,34 +257,34 @@ cd "Karpagam campus social networking application"
 git submodule update --init --recursive
 ```
 
-### 2. Configure Environment Variables
-Create `.env` files in both the **Root** (Frontend) and the **Middleware** (Backend) directories.
+### 2. Configure Environment variables
 
-#### Middleware Configuration
-Create `middleware/.env` from `middleware/.env.example`:
+<details>
+  <summary>🔑 Click to view Environment Configuration templates</summary>
+
+#### Middleware Settings (`middleware/.env`)
 ```env
 PORT=3001
 NODE_ENV=development
 FRONTEND_ORIGIN=http://localhost:5173
 JWT_SECRET=your_super_secret_jwt_key_here
 
-# PostgreSQL Database URL
+# PostgreSQL URL
 DATABASE_URL="postgresql://username:password@localhost:5432/kce_connect"
 
-# ServiceNow Instance Connection
-SERVICENOW_INSTANCE_URL=https://your-instance.service-now.com
-SERVICENOW_USERNAME=your_admin_username
-SERVICENOW_PASSWORD=your_admin_password
+# ServiceNow developer instance API credentials
+SERVICENOW_INSTANCE_URL=https://dev319062.service-now.com
+SERVICENOW_USERNAME=your_snow_username
+SERVICENOW_PASSWORD=your_snow_password
 SERVICENOW_TABLE=x_kce_campus_request
 ```
 
-#### Frontend Configuration
-Create `.env` in the root folder:
+#### Frontend Settings (Root folder `.env`)
 ```env
 VITE_API_URL=http://localhost:3001
 VITE_SOCKET_URL=http://localhost:3001
 
-# Firebase Configuration Details
+# Firebase credentials
 VITE_FIREBASE_API_KEY=your_firebase_api_key
 VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
 VITE_FIREBASE_PROJECT_ID=your_project_id
@@ -188,30 +292,25 @@ VITE_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
 VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
 VITE_FIREBASE_APP_ID=your_app_id
 ```
+</details>
 
-### 3. Install Dependencies
-Install dependencies in both the root folder (frontend) and the middleware folder:
+### 3. Install Dependencies & Setup DB
 ```bash
-# Root (Frontend)
+# Install frontend packages
 npm install
 
-# Middleware (Backend)
+# Install middleware packages
 cd middleware
 npm install
-cd ..
-```
 
-### 4. Database Setup & Migrations
-Prisma handles your PostgreSQL schema. Run migrations to initialize the database structure:
-```bash
-cd middleware
+# Push the database schema using Prisma
 npx prisma db push
 npx prisma generate
 cd ..
 ```
 
-### 5. Launching the App
-The project includes a launcher script `start.sh` to spin up PostgreSQL (if stopped), check the database, apply pending migrations, and spin up the backend proxy and frontend compiler in one command:
+### 4. Running the Complete App
+The project includes a launcher script to start PostgreSQL (if stopped), check the database, apply pending migrations, and spin up both servers in one command:
 ```bash
 bash start.sh
 ```
@@ -223,19 +322,5 @@ Once running:
 
 ---
 
-## 🎨 Brand Guidelines & Color Space
-
-The app interface strictly implements the Karpagam Campus color parameters:
-
-*   **Karpagam Crimson** (`#A6192E`): Used as the primary academic brand color, headers, primary buttons, and alerts.
-*   **Campus Navy** (`#1A2254`): Used as the secondary color, dark headers, footers, and active tabs.
-*   **Innovation Blue** (`#4A5FD9`): Secondary highlights, links, and "In Progress" badges.
-*   **Success Green** (`#28A745`): Correct statuses, resolved badges, and SLA completions.
-*   **Warning Gold** (`#FFC107`): Warnings, SLA near breaches, and pending states.
-
-For further typography and spacing details, refer to [brandGuidelines.md](brandGuidelines.md).
-
----
-
-## 🤝 Contributing & Submodule Layout
-The ServiceNow system configurations, update sets, and scoped app configurations reside in the [servicenow-config](servicenow-config) directory, which tracks the `sn_instances/dev319062` branch from our enterprise Git repository. If you make configuration modifications on the ServiceNow platform, export your update set xml files and commit them there.
+## 🤝 Submodule Layout
+The ServiceNow system configurations and scoped app configurations reside in the [servicenow-config](servicenow-config) directory, which tracks the `sn_instances/dev319062` branch from our enterprise Git repository. If you make configuration modifications on the ServiceNow platform, export your update set XML files and commit them there.
